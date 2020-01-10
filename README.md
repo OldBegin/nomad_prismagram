@@ -57,8 +57,15 @@ PORT=4000
 - **.babelrc 파일 생성:** 루트에 파일을 생성 하고 아래와 같이 현재 최신의 바벨프리셋을 설정해준다.  
 ```json
 { 
-    "presets": ["@babel/preset-env"] 
+    "presets": ["@babel/preset-env"]
 } 
 ```  
 
 
+## 1-2강   
+
+### 의존성 라이브러리 설치  
+```js
+yarn add graphql-tools
+yarn add merge-graphql-schemas
+```
