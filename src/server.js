@@ -2,16 +2,11 @@
 require("dotenv").config()
 import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
-import schema from "./schema";
+import schema from './schema';
 
-//.env 파일에서 PORT 값을 받아서 상수로 설정한다 없을경우 4000 으로 설정한다.
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;          //.env 파일에서 PORT 값을 받아서 상수로 설정한다 없을경우 4000 으로 설정한다.
 
-
-
-// 서버생성: 서버의 첫번째 인자로 정의된 Type을, 두번째 인자로 resolvers 를 넘겨준다
-const server = new GraphQLServer({ schema });
-
+const server = new GraphQLServer({ schema });   // 서버생성: 서버의 첫번째 인자로 정의된 Type을, 두번째 인자로 resolvers 를 넘겨준다
 
 server.express.use(logger("dev"));
 
