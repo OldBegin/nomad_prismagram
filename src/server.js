@@ -1,4 +1,6 @@
 
+// 웹서버 생성 및 구동
+
 require("dotenv").config()
 import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
