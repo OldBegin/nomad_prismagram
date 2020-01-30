@@ -85,8 +85,8 @@ yarn add merge-graphql-schemas
 ## 2강 prisma 데이터베이스 회원가입 및 세팅
 - 회원가입한다: github 계정으로 로그인 가능하다
 - 서비스추가: add service클릭
-- prisma 라이브러리 설치: npm install -g prisma
-- 로그인: Log into Prisma CLI 의 명령어코드를 복사하여 명령창에서 실행하면 로그인 된다.
+- prisma 라이브러리 설치: npm install -g prisma 또는 yarn global add prisma
+- 로그인: Log into Prisma CLI 의 명령어코드를 복사하여 명령창에서 실행하면 로그인 된다.(추후 git clone으로 프로젝트 생성시는 prisma generate 명령을 실행하면 generated 폴더가 생성된다.-따로 로그인하지 않아도됨)
 - DB모델을 프로젝트에 생성: create new service 클릭후 명령창에 prisma init 실행
   - 이때 기존 DB를 사용할지 새로 만들지 선택할수 있음 우선은 demo + mysql 선택하여 진행 
   - region: eu 또는 us 선택
