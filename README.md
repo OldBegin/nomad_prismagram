@@ -2,87 +2,67 @@
 
 Express + Nodejs + Prisma + React + ReactNative  를 이용한 인스타그램클론
 
-## 1강 프로젝트 세팅
+## 1강 프로젝트 환경설정 및 graphql 환경설정
 
-### 프로젝트 생성
+### 1-1 프로젝트 환경설정
 
 ```js
 git clone ..... //으로 생성
 
 ```
 
-### 의존성 라이브러리 설치  
+### 1-2 의존성 라이브러리 설치  
 
 ```js
 yarn init
-yarn add graphql-yoga
-yarn add nodemon -D // src/server.js 에 있는 코드를 실행하는 스크립트를 작성하는데 필요함. -D 는 개발자모드로 설치함/ 배포시에는 포함안됨
-//yarn global add babel-cli -D  //최신 코드를 사용할수 있게 함.
-```
+yarn add graphql-yoga // graphql 라이브러리
+yarn add nodemon -D  // src/server.js 에 있는 코드를 실행하는 스크립트를 작성하는데 필요함. -D 는 개발자모드로 설치함/ 배포시에는 포함안됨
+yarn global add babel-cli -D  //최신 코드를 사용할수 있게 함.
   
-### package.json 에 아래 항목 추가(커맨드창에 nodemon 명령어를 입력하면 해당 파일일 실행됨)  
-  
- ```js
- "scripts":{  
-    "dev": "nodemon --exec babel-node src/server.js" //nodemon 실행시 src/server.js을 실행하도록 하기위함.  
-  }  
-
- // nodemon.json파일을 새로 만들어서 아래와 같이 입력  
-{  
-    "ext":"js graphql" //nodemon이 감시해야할 파일의 확장자들을 지정할 수 있음. 현재 .js 와 .grqphql 확장자를 가진 파일을 감시하도록 지정한것임  
-{
-```
-  
-```js
-yarn dev  //dev 모드로 시작
-```  
-
-## 1-1강 GraphQL Server 생성  
-
-### 의존성 라이브러리
-
-- 자바스크립트는 빠른속도로 문법이 개선되어왔고 현재도 계속 변경되고 있음
-- 하지만 브라우저별로, 운영체제별로 지원하는 자바스크립트 코드버젼이 다름
-- babel은 내가사용하는 최신코드로 코딩하면, 각 운영체제나 브라우저에 맞는 버전의 문법으로 번역해주는 모듈이다.  
-
-```JS
-yarn add dotenv //.env 를 읽는 모듈임  
+// 자바스크립트는 빠른속도로 문법이 개선되어왔고 현재도 계속 변경되고 있음
+// 하지만 브라우저별로, 운영체제별로 지원하는 자바스크립트 코드버젼이 다름
+// babel은 내가사용하는 최신코드로 코딩하면, 각 운영체제나 브라우저에 맞는 버전의 문법으로 번역해주는 모듈이다.  
 yarn add @babel/cli
 yarn add @babel/core
 yarn add @babel/node
 yarn add @babel/preset-env
 
-```
+// graphql 서버구성을 위한 모듈설치
+yarn add dotenv //.env 를 읽는 모듈임
+yarn add graphql-tools //graphql의 스키마를 서버에 올리기 위한 툴  makeExecutableSchema을 사용하기 위함
+yarn add merge-graphql-schemas  // src/api/ 폴더아래 쌍으로 만들어놓은 schema 와 resolver 들을 불러와서 병합하기위한 툴
+```  
 
-- **src/.env 파일 생성:** .env 파일은 포트나 기타 환경값을 저장하기 위함 현재는 아래와 같이 포트만 설정해 둔다.  
-
+### 환경설정파일 생성 및 세팅
+- package.json 에 scripts 추가
 ```js
+ "scripts":{  
+    "dev": "nodemon --exec babel-node src/server.js" //yarn dev 명령으로 nodemon 명령어 실행스크립트 추가
+  }  
+```  
+
+- **nodemon.json 파일 생성**: 노드몬이 감시할 파일 지정
+```js
+{  
+    "ext":"js graphql" //nodemon이 감시해야할 파일의 확장자들을 지정할 수 있음. 현재 js 와 grqphql 확장자를 가진 파일을 감시하도록 지정한것임
+{
+```
+- **.env 파일 생성**: src 폴더 아래 생성
+- .env 파일은 포트나 기타 환경값을 저장하기 위함 현재는 아래와 같이 포트만 설정해 둔다.  
+```js
+//src/.env
 PORT=4000
 ```  
 
-- **.babelrc 파일 생성:** 루트에 파일을 생성 하고 아래와 같이 현재 최신의 바벨프리셋을 설정해준다.  
-
+- **.babelrc 파일 생성:**  
+- 루트에 파일을 생성 하고 아래와 같이 현재 최신의 바벨프리셋을 설정해준다.  
 ```json
 {
     "presets": ["@babel/preset-env"]
 }
 ```  
 
-## 1-2강  프리즈마 디비서버 연동전에 graphql api 설치 및 기본 구조 코딩  
-
-- 우선 웹서버: server.js 를 만들어 구동시켜서
-- api 폴더밑에 **query파일들:.js** 와 **스키마파일들:.graphql** 을 묶어서 같은폴더에 정리해놓고
-- schema.js 파일을 만들어서 이들을 fileLoader로 불러와서 makeExecutableSchema 로 병합하여 export한다.
-- 그러면 웹서버:server.js에서 이를 임포트한 후 **미들웨어:const server = new GraphQLServer({ schema });** 로 schema의 인스턴스를 생성하여 api폴더내의 모든 쿼리와 스키마파일에 접근할 수 있다.  
-
-### 1-2-1 의존성 라이브러리
-
-```js
-yarn add graphql-tools
-yarn add merge-graphql-schemas
-```
-
-### Query파일 및 스키마 파일 생성
+### Graphql 서버 세팅
 
 - api/ 폴더밑에 쿼리와 타입(스키마) 설정을 위한 폴더구조 세팅
 - api/Greeting/sayHello 폴더를 생성하여 그 밑에  쿼리를 담을 파일:sayHello.js 와 스키마를 담을 파일: sayHello.graphql 을 생성한다.
@@ -91,25 +71,137 @@ yarn add merge-graphql-schemas
 - **서버파일:server.js** 를 생성하여 웹서버를 구성하고 미들웨어에서 schema를 생성한다./ 이제 웹에서 graphql 데이터베이스 api에 접근할수 있다.
 - 브라우저에서 localhost:4000 으로 접속하여 sayHello.js/sayGoodbye 파일의 쿼리를 실행시켜서 제대로 동작하는지 확인해본다.  
 
-## 2강 prisma 데이터베이스 회원가입 및 세팅
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+## 2강 prisma 데이터베이스 세팅
+
+### 의존성 라이브러리(2강)
+
+```js
+npm install -g prisma //prisma api 라이브러리 설치
+
+// scripts 에 명령 추가
+  "scripts": {
+    "deploy": "prisma deploy", // prisma client -> server 동기화
+    "generate": "prisma generate", // prisma server -> client 동기화
+    "prisma": "prisma deploy && prisma generate", // yarn prisma 명령으로 위의 두 명령을 동시에 실행
+    "dev": "nodemon --exec babel-node src/server.js" // yarn dev 명령으로 nodemon 실행
+  }
+
+```
+  
+### 프리즈마서버 회원가입 세팅순서
 
 - 회원가입한다: github 계정으로 로그인 가능하다
 - 서비스추가: add service클릭
 - prisma 라이브러리 설치: npm install -g prisma 또는 yarn global add prisma
-- 로그인: Log into Prisma CLI 의 명령어코드를 복사하여 명령창에서 실행하면 로그인 된다.(추후 git clone으로 프로젝트 생성시는 prisma generate 명령을 실행하면 generated 폴더가 생성된다.-따로 로그인하지 않아도됨)
-- DB모델을 프로젝트에 생성: create new service 클릭후 명령창에 prisma init 실행
+- 로그인: Log into Prisma CLI 의 명령어코드를 복사하여 명령창에서 실행하면 로그인 된다.
+  **(추후 git clone으로 프로젝트 생성시는 prisma generate 명령을 실행하면 generated 폴더가 생성된다.-따로 로그인하지 않아도됨)**
+- DB모델을 프로젝트에 생성: 사이트에서 create new service 클릭후 명령창에 prisma init 실행
   - 이때 기존 DB를 사용할지 새로 만들지 선택할수 있음 우선은 demo + mysql 선택하여 진행
   - region: eu 또는 us 선택
   - service name: 그냥 엔터 - nomad_prismagram
   - stage name: 그냥엔터 - dev
   - programming language: javascript client  
-  
+    
 - .gitignore 에 geterated 폴더 추가
 - 명령창에 prisma deploy 를 실행하면 프로젝트에 생성된 DB모델이 prisma 디비서버에 자동으로 업로드됨
+- 명령창에 prisma generate 를 실행하면 서버의 변경내용이 프로젝트에 동기화됨(처음실행시에는 generate 디렉토리가 생성됨)
+  
 
-### 2-1 의존성 라이브러리
+    
+### 프리즈마의 데이터 모델 작성  
 
-```js
-npm install -g prisma //prisma api 라이브러리 설치
+```graphql
+# prisma generate 명령을 실행하면 최초에 generage폴더와 루트에 datamodel.prisma가 생성된다.
+# datamodel.prisma: 생성된 프리즈마 데이터모델 에 스키마를 정의한다.
+type User {
+  id: ID! @id
+  userName: String! @unique
+  email: String! @unique
+  firstName: String! @default(value: "")
+  lastName: String
+  bio: String
+  followers: [User!]! @relation(name: "FollowRelation")
+  following: [User!]! @relation(name: "FollowRelation")
+  Posts: [Post!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret: String!
+}
+
+...
+``` 
+  
+
+### GraphQL의 데이터 모델 작성  
+```graphql
+# 1. models.graphql 파일 생성: src 디렉터리 아래 생성
+# 2. 프리즈마의 데이터 모델을 복사하여 붙여넣는다
+# 3. graphql문법에 맞지 않는 @unique 같은 것들을 삭제한다.
+# -  프리즈마의 데이터모델이 변경되면 이 파일도 수동으로 일일이 고쳐줘야함. 나중에 자동으로 변경되는 라이브러리 같은게 나왔으면 함.
+
+type User {
+  id: ID!
+  userName: String! 
+  email: String! 
+  firstName: String! 
+  lastName: String
+  bio: String
+  followers: [User!]! 
+  following: [User!]! 
+  Posts: [Post!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret: String!
+}
+
+type Post {
+  id: ID!
+  user: User!
+  location: String
+  caption: String!
+  files: [File!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+}
+
+...
+```
+
+type Post {
+  id: ID! @id
+  user: User!
+  location: String
+  caption: String!
+  files: [File!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+}
 
 ```
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+## 3강 GraphQL API
+
+### 구현할 기능  
+
+- [] Create account
+- [] See the feed
+- [] Like/ Unlike  a photo
+- [] comment on a photo
+- [] Search by user
+- [] Search by location
+- [] See user profile
+- [] Follow / Unfollow User
+- [] See the full photo
+- [] Edit my profile
+- [] Log in
+- [] Upload a photo
+- [] Edit the photo (Delete)
