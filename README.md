@@ -73,7 +73,7 @@ PORT=4000
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ## 2강 prisma 데이터베이스 세팅
 
@@ -115,7 +115,7 @@ npm install -g prisma //prisma api 라이브러리 설치
 ### 프리즈마의 데이터 모델 작성  
 
 ```graphql
-# prisma generate 명령을 실행하면 최초에 generage폴더와 루트에 datamodel.prisma가 생성된다.
+# prisma generate 명령을 최초에 실행하면 루트에 각각 generage 디렉터리와 datamodel.prisma 파일이 생성된다.
 # datamodel.prisma: 생성된 프리즈마 데이터모델 에 스키마를 정의한다.
 type User {
   id: ID! @id
@@ -139,7 +139,7 @@ type User {
 
 ### GraphQL의 데이터 모델 작성  
 ```graphql
-# 1. models.graphql 파일 생성: src 디렉터리 아래 생성
+# 1. models.graphql 파일 생성: src/api/ 디렉터리 아래 생성
 # 2. 프리즈마의 데이터 모델을 복사하여 붙여넣는다
 # 3. graphql문법에 맞지 않는 @unique 같은 것들을 삭제한다.
 # -  프리즈마의 데이터모델이 변경되면 이 파일도 수동으로 일일이 고쳐줘야함. 나중에 자동으로 변경되는 라이브러리 같은게 나왔으면 함.
@@ -172,28 +172,16 @@ type Post {
 
 ...
 ```
-
-type Post {
-  id: ID! @id
-  user: User!
-  location: String
-  caption: String!
-  files: [File!]!
-  likes: [Like!]!
-  comments: [Comment!]!
-}
-
-```
-
-
+  
+  
+  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 ## 3강 GraphQL API
 
-### 구현할 기능  
+### USER STORIES : 구현할 기능  
 
-- [] Create account
-- [] See the feed
+- [] Log in
 - [] Like/ Unlike  a photo
 - [] comment on a photo
 - [] Search by user
@@ -202,6 +190,11 @@ type Post {
 - [] Follow / Unfollow User
 - [] See the full photo
 - [] Edit my profile
-- [] Log in
+- [] Create account
 - [] Upload a photo
 - [] Edit the photo (Delete)
+- [] See the feed
+  
+
+
+### 
