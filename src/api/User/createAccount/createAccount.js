@@ -1,6 +1,6 @@
 import { prisma } from "../../../../generated/prisma-client";
 
-export default{
+export default {
     Mutation:{
         createAccount: async (_,args)=>{
             const { userName, email, firstName = "", lastName = "", bio = "" } = args;

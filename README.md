@@ -184,20 +184,36 @@ type Post {
 
 ### USER STORIES : 구현할 기능  
 
-- [] Log in
-- [] Like/ Unlike  a photo
-- [] comment on a photo
-- [] Search by user
-- [] Search by location
-- [] See user profile
-- [] Follow / Unfollow User
-- [] See the full photo
-- [] Edit my profile
-- [] Create account
-- [] Upload a photo
-- [] Edit the photo (Delete)
-- [] See the feed
+- [x] Log in
+- [ ] Request Secret
+- [ ] Confirm Secret (Login)
+- [ ] Like/ Unlike  a photo
+- [ ] comment on a photo
+- [ ] Search by user
+- [ ] Search by location
+- [ ] See user profile
+- [ ] Follow / Unfollow User
+- [ ] See the full photo
+- [ ] Edit my profile
+- [ ] Create account
+- [ ] Upload a photo
+- [ ] Edit the photo (Delete)
+- [ ] See the feed
   
+### 랜덤단어를 이용하여 로그인 구현
 
+- **words.js 파일생성:** 명사 50단어, 형용사 50단어를 각각 리스트로 만들어서 export
+- **utils.js 파일생성:** 형용사 + 명사 랜덤으로 리턴하는 함수 generateSecret 생성
 
-### 
+```js
+import { nouns, adjectives } from './words'; // 명사, 형용사를 각 50개씩 가지고 있는 배열
+
+export const generateSecret = () => {
+  const min = 0;
+  const max = nouns.length;
+  const randNoun = Math.floor(Math.random() * ( nouns.length ));  // 최소값이 0 이므로 그냥 최대값만 넣어주면 됨.
+  const randAdj = Math.floor(Math.random() * ( max - min )) + min ; // 최소값이 0 이기때문에 min 이 필요없지만 랜덤함수를 이해하기 위해 코딩함. 
+
+  return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
+}
+```

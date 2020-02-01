@@ -8,7 +8,7 @@ import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
 import schema from './schema';
 
-dotenv.config({path: path.resolve(__dirname, ".env")}); // .env 파일에서 변수들을 로드
+dotenv.config({path: path.join(__dirname, ".env")}); // 현재경로의 .env 파일에서 변수들을 로드: path사용시 path.resolve 를 사용해도 됨
 
 const PORT = process.env.PORT;        //.env 파일에서 PORT 변수를 가져와서 상수로 설정한다
 
