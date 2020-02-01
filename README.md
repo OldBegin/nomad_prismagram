@@ -28,13 +28,15 @@ yarn add @babel/node
 yarn add @babel/preset-env
 
 // graphql 서버구성을 위한 모듈설치
-yarn add dotenv //.env 를 읽는 모듈임
+yarn add dotenv //.env 파일에 따로 환경변수를 저장할 수 있음.
 yarn add graphql-tools //graphql의 스키마를 서버에 올리기 위한 툴  makeExecutableSchema을 사용하기 위함
 yarn add merge-graphql-schemas  // src/api/ 폴더아래 쌍으로 만들어놓은 schema 와 resolver 들을 불러와서 병합하기위한 툴
 ```  
 
 ### 환경설정파일 생성 및 세팅
+
 - package.json 에 scripts 추가
+
 ```js
  "scripts":{  
     "dev": "nodemon --exec babel-node src/server.js" //yarn dev 명령으로 nodemon 명령어 실행스크립트 추가
@@ -42,13 +44,16 @@ yarn add merge-graphql-schemas  // src/api/ 폴더아래 쌍으로 만들어놓�
 ```  
 
 - **nodemon.json 파일 생성**: 노드몬이 감시할 파일 지정
+
 ```js
 {  
     "ext":"js graphql" //nodemon이 감시해야할 파일의 확장자들을 지정할 수 있음. 현재 js 와 grqphql 확장자를 가진 파일을 감시하도록 지정한것임
 {
 ```
+
 - **.env 파일 생성**: src 폴더 아래 생성
 - .env 파일은 포트나 기타 환경값을 저장하기 위함 현재는 아래와 같이 포트만 설정해 둔다.  
+
 ```js
 //src/.env
 PORT=4000
@@ -56,7 +61,9 @@ PORT=4000
 
 - **.babelrc 파일 생성:**  
 - 루트에 파일을 생성 하고 아래와 같이 현재 최신의 바벨프리셋을 설정해준다.  
+
 ```json
+
 {
     "presets": ["@babel/preset-env"]
 }
@@ -70,9 +77,7 @@ PORT=4000
 - 쿼리와 스키마를 병합할 파일: shema.js 생성하여 fileLoader를 이용하여 api폴더내의 모든 .query와 .graphql 을 불러와서 makeExecutableSchema를 이용하여 병합한 후 export한다.
 - **서버파일:server.js** 를 생성하여 웹서버를 구성하고 미들웨어에서 schema를 생성한다./ 이제 웹에서 graphql 데이터베이스 api에 접근할수 있다.
 - 브라우저에서 localhost:4000 으로 접속하여 sayHello.js/sayGoodbye 파일의 쿼리를 실행시켜서 제대로 동작하는지 확인해본다.  
-
-
-
+  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ## 2강 prisma 데이터베이스 세팅
@@ -98,20 +103,18 @@ npm install -g prisma //prisma api 라이브러리 설치
 - 서비스추가: add service클릭
 - prisma 라이브러리 설치: npm install -g prisma 또는 yarn global add prisma
 - 로그인: Log into Prisma CLI 의 명령어코드를 복사하여 명령창에서 실행하면 로그인 된다.
-  **(추후 git clone으로 프로젝트 생성시는 prisma generate 명령을 실행하면 generated 폴더가 생성된다.-따로 로그인하지 않아도됨)**
+  **(추후 git clone으로 프로젝트 생성시는 prisma generate 명령을 실행하면 prisma 사이트 로그인창이 뜨고 로그인하면 프로젝트 폴더에 generated 폴더가 생성됨**
 - DB모델을 프로젝트에 생성: 사이트에서 create new service 클릭후 명령창에 prisma init 실행
   - 이때 기존 DB를 사용할지 새로 만들지 선택할수 있음 우선은 demo + mysql 선택하여 진행
   - region: eu 또는 us 선택
   - service name: 그냥 엔터 - nomad_prismagram
   - stage name: 그냥엔터 - dev
   - programming language: javascript client  
-    
+  
 - .gitignore 에 geterated 폴더 추가
 - 명령창에 prisma deploy 를 실행하면 프로젝트에 생성된 DB모델이 prisma 디비서버에 자동으로 업로드됨
 - 명령창에 prisma generate 를 실행하면 서버의 변경내용이 프로젝트에 동기화됨(처음실행시에는 generate 디렉토리가 생성됨)
   
-
-    
 ### 프리즈마의 데이터 모델 작성  
 
 ```graphql
@@ -134,10 +137,10 @@ type User {
 }
 
 ...
-``` 
-  
+```
 
 ### GraphQL의 데이터 모델 작성  
+
 ```graphql
 # 1. models.graphql 파일 생성: src/api/ 디렉터리 아래 생성
 # 2. 프리즈마의 데이터 모델을 복사하여 붙여넣는다
@@ -146,13 +149,13 @@ type User {
 
 type User {
   id: ID!
-  userName: String! 
-  email: String! 
-  firstName: String! 
+  userName: String!
+  email: String!
+  firstName: String!
   lastName: String
   bio: String
-  followers: [User!]! 
-  following: [User!]! 
+  followers: [User!]!
+  following: [User!]!
   Posts: [Post!]!
   likes: [Like!]!
   comments: [Comment!]!
