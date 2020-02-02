@@ -254,3 +254,10 @@ export const sendSecretMail = (mailTo, secretWord) => {
 }
 
 ```
+
+## develop branch 생성
+
+- commit by develop
+- develop -> origin develop
+
+
