@@ -225,13 +225,15 @@ export const generateSecret = () => {
 
 export const sendSecretMail = (mailTo, secretWord) => {
   
+  dotenv.config();
+  
   const options = {
-    auth:{
-      api_user: 'youngun',
-      api_key: 'nice5734$$'
+    auth: {
+      api_user: process.env.SENDGRID_USERNAME,
+      api_key: process.env.SENDGRID_PASSWORD
     }
-  }
-  //var client = nodemailer.createTransport(sgTransport(options)); //보내는사람
+  };
+
   const client = nodemailer.createTransport(sgTransport(options));
 
   var email = {
@@ -249,4 +251,6 @@ export const sendSecretMail = (mailTo, secretWord) => {
       console.log('Mail sent:', info);
     }
   })
+}
+
 ```
