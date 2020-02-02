@@ -217,3 +217,36 @@ export const generateSecret = () => {
   return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
 }
 ```
+
+### 사용자에게 랜덤 단어조합을 이메일로 발송하는 기능 구현
+
+```js
+// util.js
+
+export const sendSecretMail = (mailTo, secretWord) => {
+  
+  const options = {
+    auth:{
+      api_user: 'youngun',
+      api_key: 'nice5734$$'
+    }
+  }
+  //var client = nodemailer.createTransport(sgTransport(options)); //보내는사람
+  const client = nodemailer.createTransport(sgTransport(options));
+
+  var email = {
+    from: 'ygyou.reg@me.com',
+    to: mailTo,
+    subject: 'send mail test',
+    text: 'Hello im youngun',
+    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
+  };
+
+  client.sendMail(email, function(err, info){   //메일 발송
+    if( err ){
+      console.log('fail to send mail: ',err);
+    }else{
+      console.log('Mail sent:', info);
+    }
+  })
+```

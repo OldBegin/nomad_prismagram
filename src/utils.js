@@ -8,6 +8,8 @@
 import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
+import dotenv from "dotenv";
+
 
 
 export const generateSecret = () => {
@@ -23,16 +25,18 @@ export const generateSecret = () => {
 
 ///////////////////////////////////////////////////////////// 메일 보내기 /////////////////
 
-
+ 
 export const sendSecretMail = (mailTo, secretWord) => {
   
+  dotenv.config();
+  
   const options = {
-    auth:{
-      api_user: 'youngun',
-      api_key: 'nice5734$$'
+    auth: {
+      api_user: process.env.SENDGRID_USERNAME,
+      api_key: process.env.SENDGRID_PASSWORD
     }
-  }
-  //var client = nodemailer.createTransport(sgTransport(options)); //보내는사람
+  };
+
   const client = nodemailer.createTransport(sgTransport(options));
 
   var email = {
