@@ -63,7 +63,7 @@ export const sendGmail = (emailTo, secretWord) => {
     to: emailTo,
     subject: 'this is test mail to me in develop environment',
     text: 'Hello im youngun',
-    html: `hello! your login secret is <strong><u>${secretWord}</u><strong></br>Copy it and paste on the app to log in website`
+    html: `hello! your login secret is <strong><u>${secretWord}</u></strong></br>Copy it and paste on the app to log in website`
   };
 
   var senderOptions = {

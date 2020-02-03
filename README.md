@@ -185,8 +185,8 @@ type Post {
 ### USER STORIES : 구현할 기능  
 
 - [x] Log in
-- [ ] Request Secret
-- [ ] Confirm Secret (Login)
+- [x] Request Secret
+- [x] Confirm Secret (Login)
 - [ ] Like/ Unlike  a photo
 - [ ] comment on a photo
 - [ ] Search by user
@@ -200,6 +200,7 @@ type Post {
 - [ ] Edit the photo (Delete)
 - [ ] See the feed
   
+
 ### 랜덤단어를 이용하여 로그인 구현
 
 - **words.js 파일생성:** 명사 50단어, 형용사 50단어를 각각 리스트로 만들어서 export
@@ -218,23 +219,7 @@ export const generateSecret = () => {
 }
 ```
 
-## 랜덤문자 발생기 generateSecret 구현(#3-2)
-
-```js
-// util.js
-////////////////////// 랜덤문자 발생기 //////////////////////////////////////////////////
-export const generateSecret = () => {
-  
-  const min = 0;
-  const max = nouns.length;
-  const randNoun = Math.floor(Math.random() * ( nouns.length ));  // 최소값이 0 이므로 그냥 최대값만 넣어주면 됨.
-  const randAdj = Math.floor(Math.random() * ( max - min )) + min ; // 최소값이 0 이기때문에 min 이 필요없지만 랜덤함수를 이해하기 위해 코딩함. 
-  
-  return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
-}
-```
-
-## sendgrid 메일발송 모듈(#3-3)
+### sendgrid 메일발송 모듈(#3-3)
 ```js
 //util.js
 export const sendSecretMail = (emailTo, secretWord) => {
@@ -268,9 +253,12 @@ export const sendSecretMail = (emailTo, secretWord) => {
 
 ```
 
-## 지메일 발송 모듈 sendGmail 구현
+### 지메일 발송 모듈 sendGmail 구현
 ```js
 //util.js
+// 우선 gmail설정중 아래 두곳의 엑세스를 허용해주어야 함.
+// https://myaccount.google.com/lesssecureapps
+// https://accounts.google.com/DisplayUnlockCaptcha
 export const sendGmail = (emailTo, secretWord) => {
   
   var gmailOptins = {
@@ -306,4 +294,5 @@ export const sendGmail = (emailTo, secretWord) => {
 
 ```
 
-
+### 유저정보 확인기능 confirmSecret 구현중...
+- resolver 구현중...
