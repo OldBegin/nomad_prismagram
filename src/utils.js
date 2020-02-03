@@ -10,8 +10,9 @@ import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 import dotenv from "dotenv";
 
+dotenv.config();
 
-
+////////////////////// 랜덤문자 발생기 //////////////////////////////////////////////////
 export const generateSecret = () => {
   
   const min = 0;
@@ -23,38 +24,71 @@ export const generateSecret = () => {
 }
 
 
-///////////////////////////////////////////////////////////// 메일 보내기 /////////////////
+////////////////////// Sendgrid 로 메일 보내기 //////////////////////////////////////////////////
+export const sendSecretMail = (emailTo, secretWord) => {
+  
+  var emailOptins = {
+    from: 'ygyou.reg@me.com',
+    to: emailTo,
+    subject: 'send mail test',
+    text: 'Hello im youngun',
+    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
+  };
 
- 
-export const sendSecretMail = (mailTo, secretWord) => {
-  
-  dotenv.config();
-  
-  const options = {
+  const SenderOptions = {
     auth: {
       api_user: process.env.SENDGRID_USERNAME,
       api_key: process.env.SENDGRID_PASSWORD
     }
   };
 
-  const client = nodemailer.createTransport(sgTransport(options));
+  const client = nodemailer.createTransport(sgTransport(SenderOptions));
 
-  var email = {
-    from: 'ygyou.reg@me.com',
-    to: mailTo,
-    subject: 'send mail test',
-    text: 'Hello im youngun',
-    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
-  };
 
-  client.sendMail(email, function(err, info){   //메일 발송
+  client.sendMail(emailOptins, (err, info)=>{   //메일 발송
     if( err ){
       console.log('fail to send mail: ',err);
     }else{
-      console.log('Mail sent:', info);
+      console.log('Mail sent:', info, emailOptins);
     }
   })
 }
+
+
+/////////////////////// G-MAIL 로 메일 보내기 /////////////////////////////////////////////////////
+export const sendGmail = (emailTo, secretWord) => {
+  
+  var gmailOptins = {
+    from: 'ygyou.reg@me.com',
+    to: emailTo,
+    subject: 'this is test mail to me in develop environment',
+    text: 'Hello im youngun',
+    html: `hello! your login secret is <strong><u>${secretWord}</u><strong></br>Copy it and paste on the app to log in website`
+  };
+
+  var senderOptions = {
+    service: 'gmail',
+    port: 587,
+    host: 'smtp.gmail.com',
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: process.env.GMAIL_ACCOUNT,
+      pass: process.env.GMAIL_PASSWORD
+    }
+  }
+
+  const transporter = nodemailer.createTransport(senderOptions)
+
+  transporter.sendMail(gmailOptins, ( error, info ) => {
+    if( error ){
+      console.log('fail to send mail: ',error);
+    }else{
+      console.log('Mail sent:', info, gmailOptins);
+    }
+  })
+}
+
 
 
 

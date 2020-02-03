@@ -218,46 +218,92 @@ export const generateSecret = () => {
 }
 ```
 
-### 사용자에게 랜덤 단어조합을 이메일로 발송하는 기능 구현
+## 랜덤문자 발생기 generateSecret 구현(#3-2)
 
 ```js
 // util.js
+////////////////////// 랜덤문자 발생기 //////////////////////////////////////////////////
+export const generateSecret = () => {
+  
+  const min = 0;
+  const max = nouns.length;
+  const randNoun = Math.floor(Math.random() * ( nouns.length ));  // 최소값이 0 이므로 그냥 최대값만 넣어주면 됨.
+  const randAdj = Math.floor(Math.random() * ( max - min )) + min ; // 최소값이 0 이기때문에 min 이 필요없지만 랜덤함수를 이해하기 위해 코딩함. 
+  
+  return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
+}
+```
 
-export const sendSecretMail = (mailTo, secretWord) => {
+## sendgrid 메일발송 모듈(#3-3)
+```js
+//util.js
+export const sendSecretMail = (emailTo, secretWord) => {
   
-  dotenv.config();
-  
-  const options = {
+  var emailOptins = {
+    from: 'ygyou.reg@me.com',
+    to: emailTo,
+    subject: 'send mail test',
+    text: 'Hello im youngun',
+    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
+  };
+
+  const SenderOptions = {
     auth: {
       api_user: process.env.SENDGRID_USERNAME,
       api_key: process.env.SENDGRID_PASSWORD
     }
   };
 
-  const client = nodemailer.createTransport(sgTransport(options));
+  const client = nodemailer.createTransport(sgTransport(SenderOptions));
 
-  var email = {
-    from: 'ygyou.reg@me.com',
-    to: mailTo,
-    subject: 'send mail test',
-    text: 'Hello im youngun',
-    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
-  };
 
-  client.sendMail(email, function(err, info){   //메일 발송
+  client.sendMail(emailOptins, (err, info)=>{   //메일 발송
     if( err ){
       console.log('fail to send mail: ',err);
     }else{
-      console.log('Mail sent:', info);
+      console.log('Mail sent:', info, emailOptins);
     }
   })
 }
 
 ```
 
-## develop branch 생성
+## 지메일 발송 모듈 sendGmail 구현
+```js
+//util.js
+export const sendGmail = (emailTo, secretWord) => {
+  
+  var gmailOptins = {
+    from: 'ygyou.reg@me.com',
+    to: emailTo,
+    subject: 'this is test mail to me in develop environment',
+    text: 'Hello im youngun',
+    html: `hello! your login secret it ${secretWord}.</br>Copy paste on the app to log in website`
+  };
 
-- commit by develop
-- develop -> origin develop
+  var senderOptions = {
+    service: 'gmail',
+    port: 587,
+    host: 'smtp.gmail.com',
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: process.env.GMAIL_ACCOUNT,
+      pass: process.env.GMAIL_PASSWORD
+    }
+  }
+
+  const transporter = nodemailer.createTransport(senderOptions)
+
+  transporter.sendMail(gmailOptins, ( error, info ) => {
+    if( error ){
+      console.log('fail to send mail: ',error);
+    }else{
+      console.log('Mail sent:', info, gmailOptins);
+    }
+  })
+}
+
+```
 
 

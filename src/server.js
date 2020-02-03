@@ -6,7 +6,7 @@ import path from 'path';
 import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
 import schema from './schema';
-import { sendSecretMail } from './utils';
+import { sendSecretMail, sendGmail } from './utils';
 
 
 dotenv.config({path: path.join(__dirname, ".env")}); // 현재경로의 .env 파일에서 변수들을 로드: path사용시 path.resolve 를 사용해도 됨
@@ -17,7 +17,8 @@ const server = new GraphQLServer({ schema }); // 서버생성: 서버의 첫번�
 
 server.express.use(logger("dev"));   //전송로그생성하는 미들웨어
 
-sendSecretMail('youngun.you@daum.net', '123456');
+//sendSecretMail('youngun.you@daum.net', '보이나오케이?');  //sendgrid 발송 테스트
+//sendGmail('youngun.you@daum.net','secret words'); //gmail 발송 테스트
 
 // 서버실행: PORT 포트에서 포트실행
 server.start({ port: PORT }, ()=>console.log(`Server running on http://localhost:${PORT}`));
