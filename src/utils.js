@@ -170,5 +170,5 @@ const signatureMaker = (claim, secret) =>{
 ///////// END OF TOKEN ENCODER /////////////////////////////////////////////////////////////////////////////////
 
 export const createToken = (email, secret, maxAge) => {
-  return jwt.sign({ email:email }, secret, { expireIn: maxAge });
+  return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
 }
