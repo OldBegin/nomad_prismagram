@@ -9,6 +9,7 @@ import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 import dotenv from "dotenv";
+import { token } from 'morgan';
 
 dotenv.config();
 
@@ -89,6 +90,53 @@ export const sendGmail = (emailTo, secretWord) => {
   })
 }
 
+////////////////////// 토큰생성기 /////////////////////////////////////////////////////
+// 토큰구조: HEADER(헤더).PAYLOAD(내용).SIGNATURE(서명)
 
 
+export const createToken = (tokenInfo, userInfo) => {
+
+    const { issuer, subject, audience, expTime } = tokenInfo;
+    const { userName, email } = userInfo;
+
+    const issuedTime = new Date().getTime();
+
+    const header = {         
+      "typ": "JWT",                                     // 토큰의 타입: JWT
+      "alg": "HS256"                                    // 해싱알고리즘: HMAC SHA256
+    }
+
+    const payload = {
+      "iss": issuer,                                    // 토큰발급자 (Issuer)
+      "sub": subject,                                   // 토큰제목   (Subject)
+      "aud": audience,                                  // 토큰대상자 (Audience)
+      "exp": issuedTime + (expTime * 60 * 60 * 1000),   // 토큰만료시간 (Expire)
+      "nbf": issuedTime,                                // 토큰 활성된 시간(Not Before)                            
+      "lat": issuedTime,                                // 토큰이 발급된 시간(Issued At)
+      "https://unitedin.kr": true,
+      "userName": userName,
+      "email": email                              
+    }
+    
+    const encodedHeader = base64Encode(header);
+    const encodedPayload = base64Encode(payload);
+    ///////////////////////////////////////////////////////// // SIGNATURE(서명) 인코딩
+
+  
+}
+// base64 인코더
+const base64Encode = (claimObject) => {
+  try {
+    const encodedObject = new Buffer
+      .from(JSON.stringify(claimObject))
+      .toString('base64')
+      .replace('=', '')
+      .replace('/', '_')
+      .replace('+', '-');
+
+    return encodedObject;
+  } catch (err) {
+    throw err
+  }
+}
 
