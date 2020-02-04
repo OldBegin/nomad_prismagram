@@ -86,6 +86,8 @@ PORT=4000
 
 ```js
 npm install -g prisma //prisma api 라이브러리 설치
+yarn add crypto-js // 토큰생성을 위한 해싱 라이브러리
+yarn add jsonwebtoken // 토큰생성 및 확인을 위한 라이브러리
 
 // scripts 에 명령 추가
   "scripts": {
