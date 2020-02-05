@@ -5,14 +5,15 @@
 // Math.floor(Math.random() * ( 50 - 10 )) + 10 //최소값만 포함: 10 부터 49 까지 생성됨
 // Math.floor(Math.random() * ( 50 - 10 + 1)) + 10 //최소값 최대값 모두 포함: 10 부터 50 까지 생성됨
 
+import './env';
+import { prisma } from '../generated/prisma-client';
 import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
-import dotenv from "dotenv";
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-
-dotenv.config();
+import passport from 'passport';
+import { JwtStrategy, ExtractJwt} from 'passport-jwt';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /// 랜덤문자 발생기 :  ()={ 형용사+명사 생성 }:return "형용사 명사"
@@ -167,8 +168,41 @@ const signatureMaker = (claim, secret) =>{
     throw err
   }
 }
-///////// END OF TOKEN ENCODER /////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////  토큰생성기 TOKEN ENCODER jwt.io /////////////////////////////////////////////////////
+// 함수구조: jwt.sign( 사용자이메일, 암호화에 사용할 비밀문자, 토큰만료까지의 분 ):return 토큰문자열
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const generateToken = (email, secret, maxAge) => {
   return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
 }
+
+////////////////////// 토큰추출기 TOKEN DECODER /////////////////////////////////////////////////////
+// 디코더구조: 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.SECRET,
+}
+
+const verifyUser = async( payload, done )=>{    //인자 payload는 JwtStrategy에서 jwtOptions를 파싱해서 넘겨준 json타입의 값
+  try{
+    const user = await prisma.user({email: payload.email});
+
+    if(user){
+      console.log('found user: ', user.email);
+      return done(null, user);
+    }else{
+      console.log('Can not found user!!');
+      return done(null, false);
+    }
+  }catch(error){
+    done(error,false)
+  }
+}
+
+passport.use(new JwtStrategy(jwtOptions, verifyUser));
+
+
+
