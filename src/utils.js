@@ -101,7 +101,7 @@ export const sendGmail = (emailTo, secretWord) => {
 // 토큰구조: HEADER(헤더).PAYLOAD(내용).SIGNATURE(서명)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const generateTokenMyself = (tokenInfo, userInfo) => {
+export const createMyToken = (tokenInfo, userInfo) => {
 
     const { issuer, subject, audience, expTime } = tokenInfo;
     const { userName, email } = userInfo;
@@ -173,7 +173,7 @@ const signatureMaker = (claim, secret) =>{
 // 함수구조: jwt.sign( 사용자이메일, 암호화에 사용할 비밀문자, 토큰만료까지의 분 ):return 토큰문자열
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const generateToken = (email, secret, maxAge) => {
+export const createToken = (email, secret, maxAge) => {
   return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
 }
 

@@ -23,8 +23,11 @@
     "nodemailer": "^6.4.2",
     "nodemailer-sendgrid": "^1.0.3",
     "nodemailer-sendgrid-transport": "^0.2.0",
+<<<<<<< HEAD
     "passport": "0.4.1",
     "passport-jwt": "4.0.0",
+=======
+>>>>>>> parent of 6561d78... 유저인증기능: 토큰생성기 코딩 완료
     "prisma": "^1.34.10"
   },
   "devDependencies": {
