@@ -312,3 +312,4 @@ export const sendGmail = (emailTo, secretWord) => {
   - 내가만든 심플토큰생성기: generateTokenMyself
   - jsonwebtoken 라이브러리 토큰생성기: generateToken
 - token 추출기 구현중: passport-jwt모듈 사용
+  - 토큰추출하여 추출된값을 클라이언트 요청값에 붙여서 받는 테스트중.....

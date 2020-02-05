@@ -1,18 +1,10 @@
-// 랜덤함수의 사용의 예
-// Math.random() // 0이상 1미만의 난수발생: 0~ 0.99999...
-// Math.floor(Double) // 소숫점아래 버림 10.9898 -> 10
-// Math.ceil(Double) //소숫점에서 올림: 10.1212 -> 11
-// Math.floor(Math.random() * ( 50 - 10 )) + 10 //최소값만 포함: 10 부터 49 까지 생성됨
-// Math.floor(Math.random() * ( 50 - 10 + 1)) + 10 //최소값 최대값 모두 포함: 10 부터 50 까지 생성됨
 
+import './env';
 import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
-import dotenv from "dotenv";
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-
-dotenv.config();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /// 랜덤문자 발생기 :  ()={ 형용사+명사 생성 }:return "형용사 명사"
@@ -26,7 +18,6 @@ export const generateSecret = () => {
   
   return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Sendgrid 메일발송기 : (받을사람이메일, 랜덤문자발생기로 생성된 loginSecret 문자)=>{ 메일발송 }: 리턴없음
@@ -167,8 +158,10 @@ const signatureMaker = (claim, secret) =>{
     throw err
   }
 }
-///////// END OF TOKEN ENCODER /////////////////////////////////////////////////////////////////////////////////
+///////// 토큰 생성기 : jwt 라이브러리 사용 /////////////////////////////////////////////////////////////////////////////////
 
 export const generateToken = (email, secret, maxAge) => {
   return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
 }
+
+
