@@ -100,7 +100,7 @@ export const sendGmail = (emailTo, secretWord) => {
 // 토큰구조: HEADER(헤더).PAYLOAD(내용).SIGNATURE(서명)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const createMyToken = (tokenInfo, userInfo) => {
+export const generateTokenMyself = (tokenInfo, userInfo) => {
 
     const { issuer, subject, audience, expTime } = tokenInfo;
     const { userName, email } = userInfo;
@@ -169,6 +169,6 @@ const signatureMaker = (claim, secret) =>{
 }
 ///////// END OF TOKEN ENCODER /////////////////////////////////////////////////////////////////////////////////
 
-export const createToken = (email, secret, maxAge) => {
+export const generateToken = (email, secret, maxAge) => {
   return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
 }
