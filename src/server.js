@@ -2,33 +2,26 @@
 // graphql 서버 생성 및 구동
 
 import './env';
-import { prisma } from './../generated/prisma-client';
 import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
 import schema from './schema';
-//import { sendSecretMail, sendGmail, createMyToken } from './utils';
-import './utils';
-
-
+import './passport';
+import { authenticateJwt } from './passport';
+//import { isAuthenticated } from './'
 
 const PORT = process.env.PORT;                                   // .env 파일에서 PORT 변수를 가져와서 상수로 설정한다
 
-const server = new GraphQLServer({ schema, context:{ prisma }}); // prisma-client를 graphql 서버에 연결해줌: context - prisma를 graphqlApi(api폴더내부)에서 인클루드하지 않고 사용할수 있다.
+const server = new GraphQLServer({
+  schema,
+  context: ({ request }) => ({ request })
+}); // prisma-client를 graphql 서버에 연결해줌: context - prisma를 graphqlApi(api폴더내부)에서 인클루드하지 않고 사용할수 있다.
 
 server.express.use(logger("dev"));                               // 전송로그생성하는 미들웨어
-
+server.express.use(authenticateJwt);
 //sendSecretMail('youngun.you@daum.net', '보이나오케이?');  //sendgrid 발송 테스트
 //sendGmail('youngun.you@daum.net','secret words'); //gmail 발송 테스트
 
 server.start({ port: PORT }, ()=>console.log(`Server running on http://localhost:${PORT}`)); // 서버실행: PORT 포트에서 포트실행
-
-
-
-
-
-
-
-
 
 
 

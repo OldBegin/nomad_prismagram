@@ -1,31 +1,18 @@
-import dotenv from 'dotenv';
-import path from 'path';
-import { createToken } from './../../../utils';
-
-dotenv.config({ path: path.join(__dirname,'.env')});
+import  './../../../env';
+import { generateToken } from './../../../utils';
+import { prisma } from '../../../../generated/prisma-client'
 
 export default {
     Mutation:{
-<<<<<<< HEAD
-        confirmSecret: async (_, args, { prisma }) => {
+        confirmSecret: async (_, args) => {
 
             const { email, loginSecret } = args;
             const userInfo = await prisma.user({email});
-
+ 
             if (userInfo.loginSecret === loginSecret){
-                const token = generateToken(userInfo.email, process.env.SECRET, '5m');
+
+                const token = generateToken(userInfo.email, process.env.SECRET, '1m');
                 return token;           
-=======
-        confirmSecret: async (_, args) => {
-           const { email, loginSecret } = args;
-           const userInfo = await prisma.user({email});
-           if (userInfo.loginSecret === loginSecret){
-               
-            const token = createToken(email, loginSecret, '5m');
-            console.log(token);
-            return token;
-            
->>>>>>> parent of 6561d78... 유저인증기능: 토큰생성기 코딩 완료
            }else{       
                throw Error("Wrong Email/secret combination!");  
            }

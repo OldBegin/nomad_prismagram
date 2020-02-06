@@ -178,8 +178,6 @@ type Post {
 ...
 ```
   
-  
-  
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 ## 3강 GraphQL API
@@ -202,7 +200,6 @@ type Post {
 - [ ] Edit the photo (Delete)
 - [ ] See the feed
   
-
 ### 랜덤단어를 이용하여 로그인 구현
 
 - **words.js 파일생성:** 명사 50단어, 형용사 50단어를 각각 리스트로 만들어서 export
@@ -222,6 +219,7 @@ export const generateSecret = () => {
 ```
 
 ### sendgrid 메일발송 모듈(#3-3)
+
 ```js
 //util.js
 export const sendSecretMail = (emailTo, secretWord) => {
@@ -256,6 +254,7 @@ export const sendSecretMail = (emailTo, secretWord) => {
 ```
 
 ### 지메일 발송 모듈 sendGmail 구현
+
 ```js
 //util.js
 // 우선 gmail설정중 아래 두곳의 엑세스를 허용해주어야 함.
@@ -296,7 +295,11 @@ export const sendGmail = (emailTo, secretWord) => {
 
 ```
 
-### 유저정보 확인기능 confirmSecret 구현중...
-
-- resolver 구현중...
-- token 생성기 직접 만드는중...
+### 유저인증 API: confirmSecret 구현중
+  
+- api resolver 구현중...
+- token 생성기 완성:
+  - 내가만든 심플토큰생성기: generateTokenMyself
+  - jsonwebtoken 라이브러리 토큰생성기: generateToken
+- token 추출기 구현중: passport-jwt모듈 사용
+  - 토큰추출하여 추출된값을 클라이언트 요청값에 붙여서 받는 테스트중.....

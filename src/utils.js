@@ -1,19 +1,10 @@
-// 랜덤함수의 사용의 예
-// Math.random() // 0이상 1미만의 난수발생: 0~ 0.99999...
-// Math.floor(Double) // 소숫점아래 버림 10.9898 -> 10
-// Math.ceil(Double) //소숫점에서 올림: 10.1212 -> 11
-// Math.floor(Math.random() * ( 50 - 10 )) + 10 //최소값만 포함: 10 부터 49 까지 생성됨
-// Math.floor(Math.random() * ( 50 - 10 + 1)) + 10 //최소값 최대값 모두 포함: 10 부터 50 까지 생성됨
 
 import './env';
-import { prisma } from '../generated/prisma-client';
 import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import { JwtStrategy, ExtractJwt} from 'passport-jwt';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /// 랜덤문자 발생기 :  ()={ 형용사+명사 생성 }:return "형용사 명사"
@@ -27,7 +18,6 @@ export const generateSecret = () => {
   
   return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Sendgrid 메일발송기 : (받을사람이메일, 랜덤문자발생기로 생성된 loginSecret 문자)=>{ 메일발송 }: 리턴없음
@@ -173,36 +163,7 @@ const signatureMaker = (claim, secret) =>{
 // 함수구조: jwt.sign( 사용자이메일, 암호화에 사용할 비밀문자, 토큰만료까지의 분 ):return 토큰문자열
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const createToken = (email, secret, maxAge) => {
-  return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
-}
-
-////////////////////// 토큰추출기 TOKEN DECODER /////////////////////////////////////////////////////
-// 디코더구조: 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET,
-}
-
-const verifyUser = async( payload, done )=>{    //인자 payload는 JwtStrategy에서 jwtOptions를 파싱해서 넘겨준 json타입의 값
-  try{
-    const user = await prisma.user({email: payload.email});
-
-    if(user){
-      console.log('found user: ', user.email);
-      return done(null, user);
-    }else{
-      console.log('Can not found user!!');
-      return done(null, false);
-    }
-  }catch(error){
-    done(error,false)
-  }
-}
-
-passport.use(new JwtStrategy(jwtOptions, verifyUser));
-
-
-
+export const generateToken = (email, secret, maxAge) => {
+    console.log(secret);
+         return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
+};
