@@ -1,7 +1,7 @@
 import { prisma } from './../../../../generated/prisma-client'
 import './../../../env';
 import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { generateToken } from './../../../utils';
 
 export default {
     Mutation:{
@@ -17,8 +17,7 @@ export default {
             if(!decodedPwd){
                 throw new Error('Your combination is incorrect');
             }
-
-            const token = jwt.sign({ email: email }, process.env.SECRET)  // unpacked token: email
+            const token = generateToken(user.email, process.env.SECRET, '5m'); // unpacked token: email
             console.log(`Success login authorization user: ${email}`);
             return { user, token };
         }

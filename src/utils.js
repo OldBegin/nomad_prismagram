@@ -3,7 +3,6 @@ import './env';
 import { nouns, adjectives } from './words';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
-import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { prisma } from './../generated/prisma-client'
 import { isAuthenticated } from './middlewares';
@@ -89,90 +88,38 @@ export const sendGmail = (emailTo, secretWord) => {
   })
 }
 
-////////////////////// 토큰생성기 TOKEN ENCODER /////////////////////////////////////////////////////
-// 토큰구조: HEADER(헤더).PAYLOAD(내용).SIGNATURE(서명)
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-export const createMyToken = (tokenInfo, userInfo) => {
-
-    const { issuer, subject, audience, expTime } = tokenInfo;
-    const { userName, email } = userInfo;
-
-    const issuedTime = new Date().getTime();
-
-    const headerClaim = {         
-      "typ": "JWT",                                     // 토큰의 타입: JWT
-      "alg": "HS256"                                    // 해싱알고리즘: HMAC SHA256
-    }
-
-    const payloadClaim = {
-      "iss": issuer,                                    // 토큰발급자 (Issuer)
-      "sub": subject,                                   // 토큰제목   (Subject)
-      "aud": audience,                                  // 토큰대상자 (Audience)
-      "nbf": issuedTime,                                // 토큰 활성된 시간(Not Before)                            
-      "lat": issuedTime,                                // 토큰이 발급된 시간(Issued At)
-      "exp": issuedTime + (expTime * 60 * 60 * 1000),   // 토큰만료시간 (Expire)
-      "https://unitedin.kr": true,
-      "userName": userName,
-      "email": email                              
-    }
-  //console.log(payloadClaim.exp);
-    const encodedHeader = base64Encode(headerClaim);                                      // header 를 base64로 인코딩
-    const encodedPayload = base64Encode(payloadClaim);                                    // payload 를 base64로 인코딩
-    const secret = process.env.SECRET;                                                // .env 에서 secret문자 가져옴
-    const signature = signatureMaker(`${encodedHeader}.${encodedPayload}`, secret);   // header + payload 를 secret 문자로 sha256 해싱 
-
-    const token = `${encodedHeader}.${encodedPayload}.${signature}`;
-    
-    //console.log('TOKEN: ',token);
-
-   return token;
-}
-///////////////// BASE64 인코딩 ///////////////////////////////
-const base64Encode = (claimObject) => {
-  try {
-    const encodedObject = new Buffer
-      .from(JSON.stringify(claimObject))
-      .toString('base64')
-      .replace('=', '')
-      .replace('/', '_')
-      .replace('+', '-');
-
-    return encodedObject;
-
-  } catch (err) {
-    throw err;
-  }
-}
-/////////////// SHA256으로 해싱 ///////////////////////////////
-const signatureMaker = (claim, secret) =>{
-  try{
-    const signature = crypto.createHmac('sha256', secret)
-      .update(claim)
-      .digest('base64')
-      .replace('=', '')
-      .replace('/', '_')
-      .replace('+', '-');
-
-      return signature;
-
-  }catch(err){
-    throw err
-  }
-}
-
-//////////////////////  토큰생성기 TOKEN ENCODER jwt.io /////////////////////////////////////////////////////
+//////////////////////  토큰생성기 TOKEN ENCODER jwt.sign 사용 /////////////////////////////////////////////////////
 // 함수구조: jwt.sign( 사용자이메일, 암호화에 사용할 비밀문자, 토큰만료까지의 분 ):return 토큰문자열
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const generateToken = (email, secret, maxAge) => {
-    const token = jwt.sign({ email: email }, secret, { expiresIn: maxAge });
-    console.log(`success to generate token: ${token}`);
-    return token;
+  const token = jwt.sign({ email: email }, secret, { expiresIn: maxAge });
+  console.log(`Success issueing new token: ${token} this token is valid in ${maxAge}`);
+  return token;
 };
 
+//////////////////////  토큰추출기 TOKEN DECODER jwt.verify 사용 /////////////////////////////////////////////////////
+// - 함수구조: isAuthToken( 리졸버의 인자 request를 받음 ):return payload{exp,iat,email}
+// - 리턴값으로 payload 객체를 사용할수 있으나 사용하지 않음
+// - 디비와 비교할 필요없음: 토큰을 SECRET key로 검증만 함.
+// - 서버에 context로 등록해놓고 API 리졸버에서 직접 호출하여 사용함 
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////// loginSecret 을 받은 유저인지 확인 //////////////////////////
+export const isAuthToken = (request) =>{
+  const Authorization = request.get('Authorization');
+  if(Authorization){
+    const token = Authorization.replace('Bearer ','');
+    const payload = jwt.verify(token, process.env.SECRET);
+    console.log(`isAuthToken: Success to verify token:${JSON.stringify(payload)}`);
+  }else{
+    throw new Error('Not authenticated');
+  }
+}
+
+///////////////// loginSecret 인증 /////////////////////////////////////////////////////////////
+/// - 이메일로 발송한 비밀문자를 확인하기 위해 사용함:
+/// - 이메일로 발송시 발송내역을 db에도 저장하므로, 넘어온 인자값과 디비값을 비교하여 있을경우 return true
+////////////////////////////////////////////////////////////////////////////////////////////////
 export const isAuthorizedEmail = async (email, loginSecret) =>{
   try{
     const user = await prisma.userBeforeEmailAuth({email});

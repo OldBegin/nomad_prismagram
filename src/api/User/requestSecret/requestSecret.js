@@ -1,28 +1,10 @@
-import { prisma } from './../../../../generated/prisma-client'
-import { generateSecret, sendGmail } from '../../../utils';
-
-//// nomad 타입의 인증 ////////////////////////////////////////////////////////////
-// export default {
-//   Mutation: {
-//     requestSecret: async (_, args) => {
-//       const { email } = args;
-//       const loginSecret = generateSecret();
-//       try {
-//         await sendGmail(email, loginSecret);
-//         await prisma.updateUser({ data: { loginSecret }, where: { email } });
-//         return true;
-//       } catch (error) {
-//         console.log(error);
-//         return false;
-//       }
-//     }
-//   }
-// };
-
-
 //// veolg 타입의 인증 ////////////////////////////////////////////////////////////
 // 회원가입시 시크릿 문자를 이메일로 발송하고 발송내역을 디비에 저장함.
 //////////////////////////////////////////////////////////////////////////////////
+
+import { prisma } from './../../../../generated/prisma-client'
+import { generateSecret, sendGmail } from '../../../utils';
+
 export default {
   Mutation: {
     requestSecret: async (_, args) => {

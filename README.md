@@ -316,4 +316,19 @@ export const sendGmail = (emailTo, secretWord) => {
 
 - passport가 아닌 jwt만으로 토큰생성과 추출을 한다.
 - 회원가입: 이메일을 입력하면, 시크릿문자가 포함된 메일을 발송하고 사용자는 시크릿문자를 복사해서 입력하면 회원가입이 승인되며, 토큰을 발행한다.
-- 로그인: 이메일, 비밀번호를 입력받아 인증되면 token, user 를 리턴한다.
+- 로그인: 이메일, 비밀번호를 입력받아 인증되면 token을 발행한다.
+
+```js
+///// 토큰을 시크릿키로 검증 및 추출하여 만기확인 /////
+export const isAuthToken = (request) =>{
+  const Authorization = request.get('Authorization');
+  if(Authorization){
+    const token = Authorization.replace('Bearer ','');
+    const payload = jwt.verify(token, process.env.SECRET);
+    console.log(`isAuthToken: Success to verify token:${JSON.stringify(payload)}`);
+  }else{
+    throw new Error('Not authenticated');
+  }
+}
+```
+- passport.js 간소화
