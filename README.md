@@ -182,6 +182,14 @@ type Post {
   
 ## 3강 GraphQL API
 
+```js
+yarn add crypto-js // 토큰생성을 위한 해싱 라이브러리
+yarn add jsonwebtoken // 토큰생성 및 확인을 위한 라이브러리
+yarn add password  // 토큰에서 사용자 정보를 추출하기 위함.
+yarn add bcryptjs // 비밀번호를 해싱하여 저장하기 위함.
+
+```
+
 ### USER STORIES : 구현할 기능  
 
 - [x] Log in
@@ -303,3 +311,9 @@ export const sendGmail = (emailTo, secretWord) => {
   - jsonwebtoken 라이브러리 토큰생성기: generateToken
 - token 추출기 구현중: passport-jwt모듈 사용
   - 토큰추출하여 추출된값을 클라이언트 요청값에 붙여서 받는 테스트중.....
+
+### 유저인증기능 다른형태로 구현
+
+- passport가 아닌 jwt만으로 토큰생성과 추출을 한다.
+- 회원가입: 이메일을 입력하면, 시크릿문자가 포함된 메일을 발송하고 사용자는 시크릿문자를 복사해서 입력하면 회원가입이 승인되며, 토큰을 발행한다.
+- 로그인: 이메일, 비밀번호를 입력받아 인증되면 token, user 를 리턴한다.

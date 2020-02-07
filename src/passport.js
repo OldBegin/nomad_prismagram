@@ -5,18 +5,15 @@ import passport from "passport";
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { prisma } from './../generated/prisma-client';
 
-const jwtOptions = {
+const opt = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.SECRET,
 }
 
-const verifyToken = async (payload, done) => {   // Decoding 된 토큰이 payload 인자로 넘어옴
-  console.log("2 - in verifyToken::::::::::", payload);
+const verifyUser = async (payload, done) => {   // Decoding 된 토큰이 payload 인자로 넘어옴
   try {
-    
+    console.log("2 - in verifyToken::::::::::", payload);
     const user = await prisma.user({ email: payload.email });  //토큰의  payload 중 email을 디비와 비교함
-    
-    console.log("3 - in verifyToken::::::::::", user);
     
     if (user) {
       return done(null, user);
@@ -24,23 +21,21 @@ const verifyToken = async (payload, done) => {   // Decoding 된 토큰이 paylo
       return done(null, false);
     }
   } catch (error) {
-    console.log("3 - in verifyToken::::::::::", user);
     return done(error, false); 
   }
 };
 
 export const authenticateJwt = (req, res, next) => 
-  passport.authenticate("jwt", { sessions: false }, (error, user) => {
-    console.log("1 - in authenticateJwt::::::::::", user);
+  passport.authenticate("jwt", { session: false }, (error, user) => {
+  // console.log('request::::', req);
     if (user) {
       req.user = user;
     }
     next();
   })(req, res, next);
-console.log("4 - in verifyToken::::::::::");
-passport.use(new Strategy(jwtOptions, verifyToken));
-console.log("5 - in verifyToken::::::::::");
+
 passport.initialize();
+passport.use(new Strategy(opt, verifyUser));
 
 
 

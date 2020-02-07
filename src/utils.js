@@ -5,6 +5,8 @@ import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import { prisma } from './../generated/prisma-client'
+import { isAuthenticated } from './middlewares';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 /// 랜덤문자 발생기 :  ()={ 형용사+명사 생성 }:return "형용사 명사"
@@ -164,6 +166,23 @@ const signatureMaker = (claim, secret) =>{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const generateToken = (email, secret, maxAge) => {
-    console.log(secret);
-         return jwt.sign({ email: email }, secret, { expiresIn: maxAge });
+    const token = jwt.sign({ email: email }, secret, { expiresIn: maxAge });
+    console.log(`success to generate token: ${token}`);
+    return token;
 };
+
+
+/////////////////// loginSecret 을 받은 유저인지 확인 //////////////////////////
+export const isAuthorizedEmail = async (email, loginSecret) =>{
+  try{
+    const user = await prisma.userBeforeEmailAuth({email});
+    if(user.email && user.loginSecret === loginSecret){  //임시테이블에 사용자가존재하고 로그인시크릿이 동일하면 트루
+      console.log(`success to authorize loginSecret!!`)
+      return true;
+    }else{
+      throw Error("loginSecret has been no confirmed")
+    }
+  }catch(error){
+    throw Error("error occured confirming loginSecret");
+  }
+}

@@ -2,6 +2,7 @@ type User {
   id: ID! @id
   userName: String! @unique
   email: String! @unique
+  password: String
   firstName: String! @default(value: "")
   lastName: String
   bio: String
@@ -55,4 +56,16 @@ type Message {
   from: User! @relation(name: "From")
   to: User! @relation(name: "To")
   room: Room!
+}
+
+type AuthPayload {
+  id: ID! @id
+  token: String
+  user: User
+}
+
+type UserBeforeEmailAuth {
+  id: ID! @id
+  email: String! @unique
+  loginSecret: String!
 }
