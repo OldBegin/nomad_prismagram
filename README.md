@@ -332,3 +332,4 @@ export const isAuthToken = (request) =>{
 }
 ```
 - passport.js 간소화
+- toggleLike 리졸버 구현완료

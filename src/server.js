@@ -1,12 +1,12 @@
 
-// graphql 서버 생성 및 구동
+// graphql API 서버 생성 및 구동
 
 import './env';
 import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
 import schema from './schema';
 import './passport';
-//import { authenticateJwt, isAuthToken } from './passport';     // passport의 인증을 사용할 경우: 주석해제
+//import { authenticateJwt } from './passport';     // passport의 인증을 사용할 경우: 주석해제
 import passport from 'passport';
 import { isAuthToken } from './utils';                           // passport의 인증을 사용할 경우: 주석처리
 //import { isAuthenticated } from './middlewares'

@@ -112,6 +112,7 @@ export const isAuthToken = (request) =>{
   if(Authorization){
     const token = Authorization.replace('Bearer ','');
     const payload = jwt.verify(token, process.env.SECRET);
+    //console.log('isAuthToken: Success to verify token:', request);
     console.log('isAuthToken: Success to verify token:',JSON.stringify(payload));
     return payload;
   }else{
