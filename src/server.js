@@ -6,9 +6,9 @@ import { GraphQLServer} from "graphql-yoga";
 import logger from 'morgan';
 import schema from './schema';
 import './passport';
-import { authenticateJwt } from './passport';
+//import { authenticateJwt, isAuthToken } from './passport';     // passport의 인증을 사용할 경우: 주석해제
 import passport from 'passport';
-import { isAuthToken } from './utils';
+import { isAuthToken } from './utils';                           // passport의 인증을 사용할 경우: 주석처리
 //import { isAuthenticated } from './middlewares'
 
 const PORT = process.env.PORT;                                   // .env 파일에서 PORT 변수를 가져와서 상수로 설정한다
@@ -20,8 +20,8 @@ const server = new GraphQLServer({                               // prisma-clien
   }
 });
 
-server.express.use(logger("dev"));                            // 전송로그생성하는 미들웨어
-//server.express.use(authenticateJwt);              / passport-jwt 를 이용하여 인증시 주석제거하여 사용
+server.express.use(logger("dev"));                              // 전송로그생성하는 미들웨어
+//server.express.use(authenticateJwt);                          // passport 인증을 사용할 경우: 주석해제
 
 
 

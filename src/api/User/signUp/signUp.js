@@ -7,12 +7,12 @@ export default {
     Mutation:{
         signUp: async (_, args)=>{
             const { userName, email, loginSecret, password, firstName = "", lastName = "", bio = "" } = args;
-            //await isAuthorizedEmail(email,loginSecret)
+            await isAuthorizedEmail(email,loginSecret)
             const encodedPwd = await bcryptjs.hash(password,10);
             console.log(`Success encoding password!!`);
             
             const user = await prisma.createUser({ userName, email, password:encodedPwd, firstName, lastName, bio });
-            const token = generateToken(user.email,process.env.SECRET, '1m');
+            const token = generateToken(user.id, user.email, process.env.SECRET, '10m');
             console.log(`Success to signUp of user ${user.email}`);
            
             return { user, token };

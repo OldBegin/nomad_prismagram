@@ -42,3 +42,12 @@ passport.use(new Strategy( optionJwt, async (payload, done) => {   // Decoding �
     return done(error, false);
   }
 }));
+////////////////////////////////////////////////////////////////////////
+// 인증용 미들웨어
+////////////////////////////////////////////////////////////////////////
+export const isAuthToken = request => {
+  if (!request.user) {
+    throw Error("You need to log in to perform this action");
+  }
+  return;
+};

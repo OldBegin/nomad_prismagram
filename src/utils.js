@@ -92,15 +92,17 @@ export const sendGmail = (emailTo, secretWord) => {
 // 함수구조: jwt.sign( 사용자이메일, 암호화에 사용할 비밀문자, 토큰만료까지의 분 ):return 토큰문자열
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const generateToken = (email, secret, maxAge) => {
-  const token = jwt.sign({ email: email }, secret, { expiresIn: maxAge });
+export const generateToken = (id, email, secret, maxAge) => {
+  const token = jwt.sign({ id, email }, secret, { expiresIn: maxAge });
   console.log(`Success issueing new token: ${token} this token is valid in ${maxAge}`);
   return token;
 };
 
+
+
 //////////////////////  토큰추출기 TOKEN DECODER jwt.verify 사용 /////////////////////////////////////////////////////
 // - 함수구조: isAuthToken( 리졸버의 인자 request를 받음 ):return payload{exp,iat,email}
-// - 리턴값으로 payload 객체를 사용할수 있으나 사용하지 않음
+// - payload 객체를 리턴함{id, email, exp, iat}
 // - 디비와 비교할 필요없음: 토큰을 SECRET key로 검증만 함.
 // - 서버에 context로 등록해놓고 API 리졸버에서 직접 호출하여 사용함 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,9 +112,10 @@ export const isAuthToken = (request) =>{
   if(Authorization){
     const token = Authorization.replace('Bearer ','');
     const payload = jwt.verify(token, process.env.SECRET);
-    console.log(`isAuthToken: Success to verify token:${JSON.stringify(payload)}`);
+    console.log('isAuthToken: Success to verify token:',JSON.stringify(payload));
+    return payload;
   }else{
-    throw new Error('Not authenticated');
+    throw new Error('Not authenticated Token');
   }
 }
 

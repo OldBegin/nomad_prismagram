@@ -17,7 +17,7 @@ export default {
             if(!decodedPwd){
                 throw new Error('Your combination is incorrect');
             }
-            const token = generateToken(user.email, process.env.SECRET, '5m'); // unpacked token: email
+            const token = generateToken(user.id, user.email, process.env.SECRET, '60m'); // unpacked token: email
             console.log(`Success login authorization user: ${email}`);
             return { user, token };
         }
