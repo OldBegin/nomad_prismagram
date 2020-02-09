@@ -64,7 +64,7 @@ type AuthPayload {
   user: User
 }
 
-type UserBeforeEmailAuth{
+type UserWaitSignUp{
   id: ID!
   email: String!
   loginSecret: String!

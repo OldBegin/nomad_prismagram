@@ -45,9 +45,9 @@ export const sendSecretMail = (emailTo, secretWord) => {
 
   client.sendMail(emailOptins, (err, info)=>{   //메일 발송
     if( err ){
-      console.log('fail to send mail: ',err);
+      console.log(' :::sendSecretMail::: fail to send mail::: ',err);
     }else{
-      console.log('Mail sent:', info, emailOptins);
+      console.log(' :::sendSecretMail::: Mail sent ', info, emailOptins);
     }
   })
 }
@@ -81,9 +81,9 @@ export const sendGmail = (emailTo, secretWord) => {
 
   transporter.sendMail(gmailOptins, ( error, info ) => {
     if( error ){
-      console.log('fail to send mail: ',error);
+      console.log(' :::sendMail::: Fail to send mail \n :::ERROR CODE IS:  ',error);
     }else{
-      console.log('Mail sent:', info, gmailOptins);
+      console.log(` :::sendMail::: Sent Mail was `, info, gmailOptins);
     }
   })
 }
@@ -94,7 +94,7 @@ export const sendGmail = (emailTo, secretWord) => {
 
 export const generateToken = (id, email, secret, maxAge) => {
   const token = jwt.sign({ id, email }, secret, { expiresIn: maxAge });
-  console.log(`Success issueing new token: ${token} this token is valid in ${maxAge}`);
+  console.log(` :::generateToken::: Success issueing new token!::: \n {${token}} \n :::this token is valid in {${maxAge}}:::`);
   return token;
 };
 
@@ -113,10 +113,10 @@ export const isAuthToken = (request) =>{
     const token = Authorization.replace('Bearer ','');
     const payload = jwt.verify(token, process.env.SECRET);
     //console.log('isAuthToken: Success to verify token:', request);
-    console.log('isAuthToken: Success to verify token:',JSON.stringify(payload));
+    console.log(' :::isAuthToken::: Success to verify token >>\n',JSON.stringify(payload));
     return payload;
   }else{
-    throw new Error('Not authenticated Token');
+    throw new Error(' :::isAuthToken::: Not authenticated Token ');
   }
 }
 
@@ -126,14 +126,31 @@ export const isAuthToken = (request) =>{
 ////////////////////////////////////////////////////////////////////////////////////////////////
 export const isAuthorizedEmail = async (email, loginSecret) =>{
   try{
-    const user = await prisma.userBeforeEmailAuth({email});
+    const user = await prisma.userWaitSignUp({email});
     if(user.email && user.loginSecret === loginSecret){  //임시테이블에 사용자가존재하고 로그인시크릿이 동일하면 트루
-      console.log(`success to authorize loginSecret!!`)
+      console.log(` :::isAuthorizedEmail::: Success to authorize loginSecret! `)
       return true;
     }else{
-      throw Error("loginSecret has been no confirmed")
+      throw Error(" :::isAuthorizedEmail::: LoginSecret has been no confirmed ")
     }
   }catch(error){
-    throw Error("error occured confirming loginSecret");
+    throw Error(" :::isAuthorizedEmail::: Error occured confirming loginSecret ");
+  }
+}
+
+///////////////// 사용자 및 이메일 중복여부 확인 /////////////////////////////////////////////////////////////
+/// - 사용자명, 이메일을 확인하여 중복이면 true, 중복이 아니면 false 반환
+////////////////////////////////////////////////////////////////////////////////////////////////
+export const isUserExist = async (email, userName) =>{
+  try{
+    const existCheck = await prisma.$exists.user({
+      OR: [
+        { email: email },
+        { userName: userName }
+      ]
+    });
+    return existCheck;
+  }catch(error){
+    throw Error(` :::isUserExist::: 사용자 중복확인에서 오류가 발생했습니다. \n :::오류코드:${error}::: `)
   }
 }

@@ -331,5 +331,7 @@ export const isAuthToken = (request) =>{
   }
 }
 ```
+
 - passport.js 간소화
 - toggleLike 리졸버 구현완료
+- API-signUp 기능추가: 회원가입시 email, userName 중복확인기능 추가:

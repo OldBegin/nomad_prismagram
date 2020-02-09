@@ -28,7 +28,7 @@ server.express.use(logger("dev"));                              // 전송로그�
 //sendSecretMail('youngun.you@daum.net', 'isOk');   //sendgrid 발송 테스트
 //sendGmail('youngun.you@daum.net','secret words'); //gmail 발송 테스트
 
-server.start({ port: PORT }, ()=>console.log(`Server running on http://localhost:${PORT}`)); // 서버실행: PORT 포트에서 포트실행
+server.start({ port: PORT }, () => console.log(` :::Server running on http://localhost:${PORT}:::`)); // 서버실행: PORT 포트에서 포트실행
 
 
 

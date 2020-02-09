@@ -13,13 +13,14 @@ export default {
       try {
         console.log(email);
         await sendGmail(email, loginSecret);
-        const isExistUser = await prisma.userBeforeEmailAuth({email});
+        const isExistUser = await prisma.userWaitSignUp({email});
+  
         if ( isExistUser ){
-          await prisma.updateUserBeforeEmailAuth({ data:{ loginSecret }, where:{ email }});
-          console.log(`메일이 존재하므로 시크릿문자 \" ${loginSecret} \" 만 갱신합니다.`);
+          await prisma.updateUserWaitSignUp({ data:{ loginSecret }, where:{ email }});
+          console.log(` :::[API]requestSecret::: 메일이 존재하므로 시크릿문자 \" ${loginSecret} \" 만 갱신합니다.:::`);
         }else{
-          await prisma.createUserBeforeEmailAuth({ email, loginSecret });
-          console.log(`"${loginSecret} 의  ${loginSecret} 를 임시로 등록합니다.`);
+          await prisma.createUserWaitSignUp({ email, loginSecret });
+          console.log(` :::[API]requestSecret::: ${loginSecret} 의 <${loginSecret}>를 임시로 등록합니다.::: `);
         }
         return true;
       } catch (error) {
