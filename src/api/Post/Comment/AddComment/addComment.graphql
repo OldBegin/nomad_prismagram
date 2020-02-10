@@ -1,3 +1,3 @@
 type Mutation{
-  addComment(text:String!, postId:String): Comment!
+  addComment(text:String!, postId:String!): Comment
 }

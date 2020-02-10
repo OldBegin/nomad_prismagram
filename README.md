@@ -195,12 +195,13 @@ yarn add bcryptjs // 비밀번호를 해싱하여 저장하기 위함.
 - [x] Log in
 - [x] Request Secret
 - [x] Confirm Secret (Login)
-- [ ] Like/ Unlike  a photo
-- [ ] comment on a photo
-- [ ] Search by user
-- [ ] Search by location
+- [x] Like/ Unlike  a photo
+- [x] comment on a photo
+- [x] Search by user
+- [x] Search by location
+- [x] Follow User
+- [x] Unfollow User
 - [ ] See user profile
-- [ ] Follow / Unfollow User
 - [ ] See the full photo
 - [ ] Edit my profile
 - [ ] Create account
@@ -336,3 +337,7 @@ export const isAuthToken = (request) =>{
 - API-toggleLike 리졸버 구현완료
 - API-signUp 기능추가: 회원가입시 email, userName 중복확인기능 추가:
 - API-addComment 생성: 포스트에 코멘트하기
+- API-searchUser 추가: 단어로 유저찾기
+- API-follow:팔로잉
+- API-unfollow: 언팔로잉
+
