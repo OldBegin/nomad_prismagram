@@ -1,6 +1,8 @@
-endpoint: https://eu1.prisma.sh/oldbegin-340b6b/nomad_prismagram/dev
+endpoint: http://localhost:4466
+# endpoint: https://eu1.prisma.sh/oldbegin-340b6b/nomad_prismagram/dev
 datamodel: datamodel.prisma
 
 generate:
   - generator: javascript-client
-    output: ./generated/prisma-client/
+    output: ./generated/prisma-client
+

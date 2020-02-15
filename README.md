@@ -341,3 +341,19 @@ export const isAuthToken = (request) =>{
 - API-follow:팔로잉
 - API-unfollow: 언팔로잉
 
+
+## 데이터베이스 리펙토링
+
+- prisma 서버를 로컬 도커로 옮김
+- mysql 서버를 aws lightsail 로 옮김(도커아님)
+- Aws Mysql 정보
+  - 환경설정파일위치: /etc/mysql/mysql.conf.d/mysqld.cnf
+  - 사용자계정: root, youngun
+  - 데이터베이스명: prisma - 프리즈마가 자동 생성함
+
+
+  - 참조: prisma2 사용시 로그인스트링: 
+  datasource db {
+      provider = "mysql"
+      url      = "mysql://youngun:비밀번호@13.209.213.17:3306/mysql"
+

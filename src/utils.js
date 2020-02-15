@@ -80,10 +80,11 @@ export const sendGmail = (emailTo, secretWord) => {
   const transporter = nodemailer.createTransport(senderOptions)
 
   transporter.sendMail(gmailOptins, ( error, info ) => {
-    if( error ){
-      console.log(' :::sendMail::: Fail to send mail \n :::ERROR CODE IS:  ',error);
-    }else{
+    if( !error ){
       console.log(` :::sendMail::: Sent Mail was `, info, gmailOptins);
+    }else{
+      console.log(' :::sendMail::: Fail to send mail \n :::ERROR CODE IS:  ',error);
+      throw Error(error);
     }
   })
 }
