@@ -201,9 +201,9 @@ yarn add bcryptjs // 비밀번호를 해싱하여 저장하기 위함.
 - [x] Search by location
 - [x] Follow User
 - [x] Unfollow User
-- [ ] See user profile
-- [ ] See the full photo
-- [ ] Edit my profile
+- [x] Edit my profile
+- [x] See user profile
+- [x] See the full post
 - [ ] Create account
 - [ ] Upload a photo
 - [ ] Edit the photo (Delete)
@@ -357,3 +357,26 @@ export const isAuthToken = (request) =>{
       provider = "mysql"
       url      = "mysql://youngun:비밀번호@13.209.213.17:3306/mysql"
 
+
+## API 추가
+
+- API-editUser: 유저정보 수정
+- API-seeUser: 유저정보 보기
+- API-seeMe: 자기정보 보기
+
+## 커스텀 fragment 생성
+
+- commentFragment: 데이터베이스를 더 깊게 검색하기위해 사용
+
+## 자동생성 정보 코딩
+
+- 기존에 등록된 데이터를 조합해서 새로운 데이터를 만들어낸다.
+- 예) 디비에 등록된 이름, 성 을 조합하여 풀네임을 만드는 리졸버와 스키마를 생성
+
+### 자동정보생성 스키마 리스트
+
+- User 스키마: fullName - 풀네임 필드
+- User 스키마: amIFollowing - 자기가 팔로우중인 유저인지 확인하는 필드
+- User 스키마: itsMe - 자기자신인지 확인하는 필드
+
+- Post 스키마: isLiked - 내가 좋아요한 포스트인지 확인하는 필드

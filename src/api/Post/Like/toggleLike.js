@@ -5,7 +5,7 @@ export default {
         toggleLike: async (_, args, { request, isAuthToken } ) =>{
             const { postId } = args;
             const reqUser = await isAuthToken(request);
-           
+            
             try{
                 const existngLike = await prisma.$exists.like({  // 현재포스트에 자신의 좋아요를 했는지 확인
                     AND: [
@@ -33,7 +33,7 @@ export default {
                 }
                 return true;
             }catch(error){
-                console.log('Fail to toggle Like');
+                console.log(':::API-toggleLike::: \n Fail to toggle Like');
                 return false
             }
             

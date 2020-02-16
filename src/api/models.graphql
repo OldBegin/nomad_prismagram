@@ -3,11 +3,14 @@ type User {
   userName: String! 
   email: String! 
   password: String
-  firstName: String! 
+  firstName: String 
   lastName: String
+  _fullName: String
   bio: String
   followers: [User!]! 
   following: [User!]! 
+  _amIFollowing: Boolean!
+  _itsMe: Boolean!
   Posts: [Post!]!
   likes: [Like!]!
   comments: [Comment!]!
@@ -23,6 +26,7 @@ type Post {
   files: [File!]!
   likes: [Like!]!
   comments: [Comment!]!
+  _isLiked: String
 }
 
 type Like {
@@ -58,14 +62,20 @@ type Message {
   room: Room!
 }
 
+type UserWaitSignUp{
+  id: ID!
+  email: String!
+  loginSecret: String!
+}
+
 type AuthPayload {
   id: ID!
   token: String
   user: User
 }
 
-type UserWaitSignUp{
-  id: ID!
-  email: String!
-  loginSecret: String!
+type _UserProfile {
+    user: User!
+    posts: [Post!]!
 }
+
