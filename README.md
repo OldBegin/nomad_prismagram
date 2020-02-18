@@ -349,7 +349,7 @@ export const isAuthToken = (request) =>{
 - Aws Mysql 정보
   - 환경설정파일위치: /etc/mysql/mysql.conf.d/mysqld.cnf
   - 사용자계정: root, youngun
-  - 데이터베이스명: prisma - 프리즈마가 자동 생성함
+  - 데이터베이스명: default@default, prisma - 프리즈마가 자동 생성함
 
 
   - 참조: prisma2 사용시 로그인스트링: 

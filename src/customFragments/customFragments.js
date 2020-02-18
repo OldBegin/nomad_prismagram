@@ -1,0 +1,55 @@
+export const USER_FRAGMENT = `
+    fragment CommentParts on Comment {
+        id
+        username
+        email
+    }
+`;
+
+export const COMMENT_FRAGMENT = `
+    fragment CommentParts on Comment {
+        id
+        text
+        user {
+            userName
+            email
+        }
+    }
+  `;
+
+export const FILE_FRAGMENT = `
+    fragment FileParts on File {
+        id
+        url
+        post{
+            id
+            caption
+        }
+    }
+`;
+
+export const FULL_POST_FRAGMENT =`
+    fragment PostParts on Post {
+        id
+        caption
+        files{
+            id
+            url
+        }
+        comments{
+            id
+            text
+            user{
+                id
+                userName
+                email
+            }
+        }
+        user{
+            id
+            userName
+            email
+        }
+    }
+    
+  `;

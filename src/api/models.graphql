@@ -27,6 +27,7 @@ type Post {
   likes: [Like!]!
   comments: [Comment!]!
   _isLiked: String
+  _likeCount: Int
 }
 
 type Like {
