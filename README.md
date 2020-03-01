@@ -379,4 +379,9 @@ export const isAuthToken = (request) =>{
 - User 스키마: amIFollowing - 자기가 팔로우중인 유저인지 확인하는 필드
 - User 스키마: itsMe - 자기자신인지 확인하는 필드
 
-- Post 스키마: isLiked - 내가 좋아요한 포스트인지 확인하는 필드
+- Post 스키마: isLiked - 내가 좋아요한 포스트인지 확인하는 필드  
+
+### API 추가: requestSecret, confirmSecret
+
+- requestSecret // 시크릿문자 이메일발송
+- confirmSecret // 시크릿문자와 이메일을 비교하여 이메일 인증

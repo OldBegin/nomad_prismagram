@@ -57,12 +57,12 @@ export const sendSecretMail = (emailTo, secretWord) => {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 export const sendGmail = (emailTo, secretWord) => {
   
-  var gmailOptins = {
+  var gmailOptions = {
     from: 'ygyou.reg@me.com',
     to: emailTo,
     subject: 'this is test mail to me in develop environment',
     text: 'Hello im youngun',
-    html: `hello! your login secret is <strong><u>${secretWord}</u></strong></br>Copy it and paste on the app to log in website`
+    html: `hello! your login secret is <strong><u>${secretWord}</u></strong></br> Copy it and paste on the app to log in website`
   };
 
   var senderOptions = {
@@ -76,17 +76,19 @@ export const sendGmail = (emailTo, secretWord) => {
       pass: process.env.GMAIL_PASSWORD
     }
   }
-
-  const transporter = nodemailer.createTransport(senderOptions)
-
-  transporter.sendMail(gmailOptins, ( error, info ) => {
-    if( !error ){
-      console.log(` :::sendMail::: Sent Mail was `, info, gmailOptins);
-    }else{
-      console.log(' :::sendMail::: Fail to send mail \n :::ERROR CODE IS:  ',error);
-      throw Error(error);
-    }
-  })
+  
+  try{
+    const transporter = nodemailer.createTransport(senderOptions)
+    transporter.sendMail(gmailOptions, ( error, info ) => {
+      if( !error ){
+        console.log(` :::sendMail::: 메일발송 성공:  `, info, gmailOptins);
+      }else{
+        console.log(' :::sendMail::: Fail to send mail \n :::ERROR CODE IS:  ',error);
+      }
+    });
+  }catch(error){
+    throw Error(`::: sendGamil ::: 메일발송에서 오류가 발생했습니다. 오류코드: ${error}`);
+  }
 }
 
 //////////////////////  토큰생성기 TOKEN ENCODER jwt.sign 사용 /////////////////////////////////////////////////////
@@ -98,8 +100,6 @@ export const generateToken = (id, email, secret, maxAge) => {
   console.log(` :::generateToken::: Success issueing new token!::: \n {${token}} \n :::this token is valid in {${maxAge}}:::`);
   return token;
 };
-
-
 
 //////////////////////  토큰추출기 TOKEN DECODER jwt.verify 사용 /////////////////////////////////////////////////////
 // - 함수구조: isAuthToken( 리졸버의 인자 request를 받음 ):return payload{exp,iat,email}
@@ -113,7 +113,6 @@ export const isAuthToken = (request) =>{
   if(Authorization){
     const token = Authorization.replace('Bearer ','');
     const payload = jwt.verify(token, process.env.SECRET);
-    //console.log('isAuthToken: Success to verify token:', request);
     console.log(' :::isAuthToken::: Success to verify token >>\n',JSON.stringify(payload));
     return payload;
   }else{
@@ -127,15 +126,16 @@ export const isAuthToken = (request) =>{
 ////////////////////////////////////////////////////////////////////////////////////////////////
 export const isAuthorizedEmail = async (email, loginSecret) =>{
   try{
+    
     const user = await prisma.userWaitSignUp({email});
+
     if(user.email && user.loginSecret === loginSecret){  //임시테이블에 사용자가존재하고 로그인시크릿이 동일하면 트루
-      console.log(` :::isAuthorizedEmail::: Success to authorize loginSecret! `)
       return true;
     }else{
-      throw Error(" :::isAuthorizedEmail::: LoginSecret has been no confirmed ")
+      return false;
     }
   }catch(error){
-    throw Error(" :::isAuthorizedEmail::: Error occured confirming loginSecret ");
+    throw Error(` :::isAuthorizedEmail::: 이메일인증에서 오류가 발생했습니다.\n 오류코드: ${error} `);
   }
 }
 

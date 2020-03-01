@@ -1,16 +1,11 @@
+
 type Mutation{
     signUp(
         userName: String!
         email:String!
-        loginSecret:String
         password:String!
         firstName:String
         lastName:String
         bio:String
-    ):AuthPayload
+    ):Boolean!
 }
-type Query{
-    something: String!
-}
-
-#AuthPayload!

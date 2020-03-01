@@ -10,11 +10,11 @@ export default {
     requestSecret: async (_, args) => {
       const { email } = args;
       const loginSecret = generateSecret();
-      try {
-        console.log(email);
-        await sendGmail(email, loginSecret);
+      try { 
+        sendGmail(email, loginSecret);
+
         const isExistUser = await prisma.userWaitSignUp({email});
-  
+        
         if ( isExistUser ){
           await prisma.updateUserWaitSignUp({ data:{ loginSecret }, where:{ email }});
           console.log(` :::[API]requestSecret::: 메일이 존재하므로 시크릿문자 \" ${loginSecret} \" 만 갱신합니다.:::`);
@@ -24,8 +24,7 @@ export default {
         }
         return true;
       } catch (error) {
-        console.log(error);
-        return false;
+        throw Error(`::: confirmSecret ::: 에러코드: ${error.message}`);
       }
     }
   }
