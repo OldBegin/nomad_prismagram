@@ -7,7 +7,7 @@ export default {
             const reqUser = isAuthToken(request);
             const userProfile = await prisma.user({id:reqUser.id});
             const posts = await prisma.user({ id:reqUser.id }).Posts();
-
+            console.log('::: request ::: ', request);
             return {
                 user: userProfile,
                 posts

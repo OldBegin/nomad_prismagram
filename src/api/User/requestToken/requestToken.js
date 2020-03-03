@@ -9,7 +9,7 @@ export default {
       const { email, password } = args;
 
       const user = await prisma.user({ email });
-
+      
       if (!user) {
         throw new Error(' :::[API]requestToken::: No such user found:::');
       }
