@@ -221,7 +221,7 @@ export const generateSecret = () => {
   const min = 0;
   const max = nouns.length;
   const randNoun = Math.floor(Math.random() * ( nouns.length ));  // 최소값이 0 이므로 그냥 최대값만 넣어주면 됨.
-  const randAdj = Math.floor(Math.random() * ( max - min )) + min ; // 최소값이 0 이기때문에 min 이 필요없지만 랜덤함수를 이해하기 위해 코딩함. 
+  const randAdj = Math.floor(Math.random() * ( max - min )) + min ; // 최소값이 0 이기때문에 min 이 필요없지만 랜덤함수를 이해하기 위해 코딩함.
 
   return `${adjectives[randAdj]} ${nouns[randNoun]}`;  
 }
@@ -341,7 +341,6 @@ export const isAuthToken = (request) =>{
 - API-follow:팔로잉
 - API-unfollow: 언팔로잉
 
-
 ## 데이터베이스 리펙토링
 
 - prisma 서버를 로컬 도커로 옮김
@@ -351,12 +350,10 @@ export const isAuthToken = (request) =>{
   - 사용자계정: root, youngun
   - 데이터베이스명: default@default, prisma - 프리즈마가 자동 생성함
 
-
-  - 참조: prisma2 사용시 로그인스트링: 
+  - 참조: prisma2 사용시 로그인스트링:
   datasource db {
       provider = "mysql"
       url      = "mysql://youngun:비밀번호@13.209.213.17:3306/mysql"
-
 
 ## API 추가
 
