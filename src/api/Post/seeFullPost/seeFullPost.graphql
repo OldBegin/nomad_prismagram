@@ -1,3 +1,9 @@
+
+type Query {
+  seeFullPost(postId: String!): Post!
+}
+
+
 # type FullPost {
 #     post: Post!
 #     user: User!
@@ -8,7 +14,3 @@
 # type Query {
 #     seeFullPost(postId:String!):FullPost!
 # }
-
-type Query {
-  seeFullPost(postId: String!): Post!
-}

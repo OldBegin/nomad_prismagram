@@ -6,7 +6,6 @@ export default {
     Query:{
         seeFullPost: async (_,args ) => {
              const { postId } = args;
-             console.log(postId);
             //  const post = await prisma.post({ id: postId });
             //  const user = await prisma.post({ id: postId }).user();
             //  const comments = await prisma.post({ id: postId }).comments().$fragment(COMMENT_FRAGMENT);

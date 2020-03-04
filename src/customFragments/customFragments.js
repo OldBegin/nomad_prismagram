@@ -1,8 +1,13 @@
 export const USER_FRAGMENT = `
-    fragment CommentParts on Comment {
+    fragment CommentParts on User {
         id
-        username
+        userName
         email
+        posts{
+            id
+            caption
+            location
+        }
     }
 `;
 
@@ -31,6 +36,7 @@ export const FILE_FRAGMENT = `
 export const FULL_POST_FRAGMENT =`
     fragment PostParts on Post {
         id
+        location
         caption
         files{
             id

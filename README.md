@@ -382,3 +382,5 @@ export const isAuthToken = (request) =>{
 
 - requestSecret // 시크릿문자 이메일발송
 - confirmSecret // 시크릿문자와 이메일을 비교하여 이메일 인증
+
+### API 추가: editPost

@@ -8,7 +8,7 @@ type User {
   bio: String
   followers: [User!]! @relation(name: "FollowRelation")
   following: [User!]! @relation(name: "FollowRelation")
-  Posts: [Post!]!
+  posts: [Post!]!
   likes: [Like!]!
   comments: [Comment!]!
   rooms: [Room!]!
