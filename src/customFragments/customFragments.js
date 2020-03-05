@@ -56,6 +56,11 @@ export const FULL_POST_FRAGMENT =`
             userName
             email
         }
+        likes{
+            user{
+                userName
+            }
+        }
     }
     
   `;
