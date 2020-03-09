@@ -7,11 +7,14 @@ type User {
   lastName: String
   _fullName: String
   bio: String
-  followers: [User!]! 
-  following: [User!]! 
+  followers: [User!]!
+  following: [User!]!
+  _followersCount: Int!
+  _followingCount: Int! 
   _amIFollowing: Boolean!
   _itsMe: Boolean!
   posts: [Post!]!
+  _postsCount: Int!
   likes: [Like!]!
   comments: [Comment!]!
   rooms: [Room!]!

@@ -1,4 +1,4 @@
-import { prisma } from "./../../../generated/prisma-client"
+import { prisma } from "../../../generated/prisma-client";
 
 export default{
     Post: {
@@ -23,6 +23,10 @@ export default{
                 .count();
 
             return likeCount;
+        },
+        comments: (parent) =>{
+            const { id: postId } = parent;
+            return prisma.post({postId}).comments();
         }
     }
 }
